@@ -1,0 +1,20 @@
+.follow-div {
+    display: none;
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0 0 8px 0 rgba(0,0,0,.08);
+    z-index: 999;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.follow-siblings-list {
+    display: none;
+}
+
+.follow-siblings-list li {
+    margin-left: 30px;
+}
