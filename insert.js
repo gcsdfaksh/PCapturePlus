@@ -56,7 +56,6 @@ function debbounce(fn, delay) {
     }
 }
 
-
 function copyText(text) {
     var textareaC = document.createElement('textarea');
     textareaC.setAttribute('readonly', 'readonly'); //设置只读属性防止手机上弹出软键盘
@@ -161,9 +160,19 @@ document.addEventListener('mousemove', debbounce((e) => {
         }
     }
 }));
-
+document.addEventListener('contextmenu', (e) => {
+    target = document.elementFromPoint(e.clientX, e.clientY);
+    if (target != null && !target.hasAttribute('x-ignore')) {
+        targetData = getData(target);
+        if (targetData != null && targetData.text.length > 0) {
+            chrome.runtime.sendMessage({type: "CaptureRight", message:targetData, url:target.href});
+            showFollow(targetData, e.clientX, e.clientY);
+        }
+    }
+})
 document.addEventListener('mouseup', (e) => {
-    try {
+
+    if (e.button === 0) {
         target = document.elementFromPoint(e.clientX, e.clientY);
         if (target != null && !target.hasAttribute('x-ignore')) {
             targetData = getData(target);
@@ -172,8 +181,6 @@ document.addEventListener('mouseup', (e) => {
                 showFollow(targetData, e.clientX, e.clientY);
             }
         }
-    } catch (err) {
-        console.log(err);
     }
 })
 

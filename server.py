@@ -12,7 +12,7 @@ current_directory = os.path.dirname(os.path.realpath(__file__))
 today_date = datetime.datetime.today().strftime('%Y-%m-%d')
 
 # 检查是否存在今天的文件夹
-folder_path =  today_date  # 替换为您的目录路径
+folder_path = today_date  # 替换为您的目录路径
 if not os.path.exists(folder_path):
     # 如果不存在，新建文件夹
     os.makedirs(folder_path)
@@ -22,8 +22,9 @@ else:
     print(f'文件夹 {folder_path} 已存在')
 
 # 将文件夹路径保存到变量
-folder_variable = folder_path+"/"
+folder_variable = folder_path + "/"
 print(f'文件夹路径保存到变量: {folder_variable}')
+
 
 class ImageAndTextHandler(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
@@ -52,17 +53,18 @@ class ImageAndTextHandler(http.server.BaseHTTPRequestHandler):
 
                     # 在鼠标位置绘制标记
                     draw = PIL.ImageDraw.Draw(screenshot)
-                    draw.ellipse((x-5, y-5, x+5, y+5), fill="red", outline="red")
+                    draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill="red", outline="red")
 
                     # 保存截图
                     # 保存截图
-                    s_ = text[0:10] + " - " + datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S.%f')[:-4  ]
-                    screenshot.save(folder_variable+s_ + ".jpg", format="JPEG", quality=60)  # 调整 quality 以确保图片不超过 500kb
+                    s_ = text[0:10] + " - " + datetime.datetime.now().strftime('%Y-%m-%d %H-%M-%S.%f')[:-4]
+                    screenshot.save(folder_variable + s_ + ".jpg", format="JPEG",
+                                    quality=60)  # 调整 quality 以确保图片不超过 500kb
                     post_url = postjson.get('url')
-                    if not os.path.exists(folder_variable+'PCaptureData.txt'):
-                        open(folder_variable+'PCaptureData.txt', 'w').close()
-                    with open(folder_variable+'PCaptureData.txt', 'a+') as file:
-                        file.write(s_ + " - " + post_url + " - "+xpath + "\n")
+                    if not os.path.exists(folder_variable + 'PCaptureData.txt'):
+                        open(folder_variable + 'PCaptureData.txt', 'w', encoding="utf-8").close()
+                    with open(folder_variable + 'PCaptureData.txt', 'a+', encoding="utf-8") as file:
+                        file.write(s_ + " - " + post_url + " - " + xpath + "\n")
 
         else:
             self.send_response(404)

@@ -1,45 +1,45 @@
 {
-    "name": "WebClickListener",
-    "version": "1.0",
+    "name": "PCapturePlus",
+    "version": "1.1",
     "description": "记录点击的元素以及触发的请求",
     "manifest_version": 2,
-    "background": {
-	  "page": "background.html"
-    },
     "permissions": ["storage",
-		"declarativeContent",
 		"webRequestBlocking",
-		"web_accessible_resources",
-		"contextMenus", // 右键菜单
-		"tabs", // 标签
-		"notifications", // 通知
-		"webRequest", // web请求
-		"http://*/*", // 可以通过executeScript或者insertCSS访问的网站
-		"https://*/*" // 可以通过executeScript或者insertCSS访问的网站
+		"contextMenus",
+		"tabs", 
+		"storage",
+		"notifications", 
+		"webRequest",
+		"<all_urls>",
+		"http://*/*", 
+		"https://*/*" 
 	
-],
-    "host_permissions":[
-      "http://127.0.0.1:8091"
-    ],
+	],
     "content_scripts": [
       {
-        "matches": ["<all_urls>"],
-        "js": ["insert.js"],
-        "css": ["insert.css"]
+        "matches": ["<all_urls>", "http://*/*", "https://*/*"],
+        "js": ["insert.js","jquery.js"],
+        "css": ["insert.css"],
+		"all_frames": true
       }
     ],
     "web_accessible_resources": [
       "insert.js"
     ],
-    "action": {
-      "default_popup": "index.html",
+
+    "browser_action": {
+      "default_popup": "popup.html",
       "default_icon": {
         "16": "icon.png",
         "32": "icon.png",
         "48": "icon.png",
         "128": "icon.png"
       },
-      "default_title": "WebClickListener"
+      "default_title": "PCapturePlus"
+    },
+
+    "background": {
+	  "page": "background.html"
     },
     "icons": {
       "16": "icon.png",
