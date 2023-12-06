@@ -19,22 +19,52 @@ chrome.tabs.onActivated.addListener(function (activeInfo) {
     });
 });
 
-async function nopasshost(hostname) {
+// async函数nopass，用于判断hostname和url是否匹配
+async function nopass(hostname,url) {
+    // 使用Promise对象，返回一个Promise对象
     return await new Promise((resolve, reject) => {
+        // 从chrome的storage中获取hostDetermine的值
         chrome.storage.sync.get({hostDetermine: true}, function (items) {
+            // 如果hostDetermine的值为true
             if (items.hostDetermine) {
+                // 从chrome的storage中获取listenHost的值
                 chrome.storage.sync.get({listenHost: ""}, function (items) {
+                    // 打印出listenHost和hostname
                     console.log(items.listenHost, "now:", hostname)
+                    // 如果listenHost和hostname不相等
                     if (items.listenHost && hostname !== items.listenHost) {
+                        // 返回true
                         resolve(true);
                     } else {
-                        resolve(false);
+                        // 从chrome的storage中获取RegexInput的值
+                        chrome.storage.sync.get({RegexInput: ""}, function (items) {
+                            // 如果RegexInput的值不为空
+                            if(items.RegexInput && items.RegexInput !== ""){
+                                // 返回!new RegExp(items.RegexInput).test(url)
+                                resolve(!new RegExp(items.RegexInput).test(url))
+                            } else {
+                                // 否则返回false
+                                resolve(false);
+                            }
+                        });
                     }
                 });
             } else {
+                // 从chrome的storage中获取listenHost的值
                 chrome.storage.sync.get({listenHost: ""}, function (items) {
+                    // 打印出listenHost和hostname
                     console.log(items.listenHost, "now:", hostname)
-                    resolve(false);
+                    // 从chrome的storage中获取RegexInput的值
+                    chrome.storage.sync.get({RegexInput: ""}, function (items) {
+                        // 如果RegexInput的值不为空
+                        if(items.RegexInput && items.RegexInput !== ""){
+                            // 返回!new RegExp(items.RegexInput).test(url)
+                            resolve(!new RegExp(items.RegexInput).test(url))
+                        } else {
+                            // 否则返回false
+                            resolve(false);
+                        }
+                    });
                 });
             }
         })
@@ -52,7 +82,7 @@ chrome.runtime.onMessage.addListener((message, callback) => {
                 // cancel 表示取消本次请求c
                 if (details.type !== 'xmlhttprequest') return {cancel: false};
                 var hostname = new URL(details.url).hostname;
-                nopasshost(hostname).then((res) => {
+                nopass(hostname,details.url).then((res) => {
                     console.log("判断是否不通过：",res);
                     if(res == true){
                         return {cancel: false}

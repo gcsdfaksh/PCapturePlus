@@ -17,7 +17,9 @@ $(document).ready(function() {
     chrome.storage.sync.get({hostDetermine: true}, function (items) {
         $('#hostDetermine').prop('checked', items.hostDetermine)
     });
-
+    chrome.storage.sync.get({RegexInput: "/[^\\.]*$"}, function (items) {
+        $('#RegexInput').val(items.RegexInput);
+    });
     $('#getHostnameButton').click(function (e) {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
             if (tabs.length > 0) {
@@ -43,6 +45,13 @@ $(document).ready(function() {
         chrome.storage.sync.set({'listenTab': value}, function () {
             // 处理保存成功的情况
 
+        });
+    });
+    $('#RegexInput').change(function () {
+        var value = $(this).val();
+
+        chrome.storage.sync.set({'RegexInput': value}, function () {
+            // 处理保存成功的情况
         });
     });
     $('#hostDetermine').change(function () {

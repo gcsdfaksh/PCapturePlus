@@ -62,9 +62,14 @@ class ImageAndTextHandler(http.server.BaseHTTPRequestHandler):
                                     quality=60)  # 调整 quality 以确保图片不超过 500kb
                     post_url = postjson.get('url')
                     if not os.path.exists(folder_variable + 'PCaptureData.txt'):
-                        open(folder_variable + 'PCaptureData.txt', 'w', encoding="utf-8").close()
-                    with open(folder_variable + 'PCaptureData.txt', 'a+', encoding="utf-8") as file:
-                        file.write(s_ + " - " + post_url + " - " + xpath + "\n")
+                        with open(folder_variable + 'PCaptureData.txt', 'w', encoding="utf-8") as file:
+                            file.close()
+                            with open(folder_variable + 'PCaptureData.txt', 'a+', encoding="utf-8") as file:
+                                file.write(s_ + " - " + post_url + " - " + xpath + "\n")
+                    else:
+                        with open(folder_variable + 'PCaptureData.txt', 'a+', encoding="utf-8") as file:
+                            file.write(s_ + " - " + post_url + " - " + xpath + "\n")
+
 
         else:
             self.send_response(404)
